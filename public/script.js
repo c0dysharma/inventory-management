@@ -22,7 +22,7 @@ const itemLi = (item) => {
 // Read operation
 const getItems = (e) => {
   e.preventDefault();
-  fetch('http://localhost:3000/api/v1/item');
+  fetch('/api/v1/item');
 };
 
 // create operation
@@ -30,7 +30,12 @@ const createItem = (e) => {
   e.preventDefault();
   const formProps = Object.fromEntries(new FormData(e.target));
 
-  fetch('http://localhost:3000/api/v1/item', {
+  // remove empty input from payload and trim it
+  for (const key of Object.keys(formProps)) {
+    if (formProps[key].trim() === '') delete formProps[key];
+    else formProps[key] = formProps[key].trim();
+  }
+  fetch('/api/v1/item', {
     method: 'post',
     body: JSON.stringify(formProps),
     headers: {
@@ -45,11 +50,12 @@ const updateItems = (e) => {
   const formProps = Object.fromEntries(new FormData(e.target));
   const { id } = formProps;
 
-  // remove empty input from payload
+  // remove empty input from payload and trim it
   for (const key of Object.keys(formProps)) {
     if (formProps[key].trim() === '') delete formProps[key];
+    else formProps[key] = formProps[key].trim();
   }
-  fetch(`http://localhost:3000/api/v1/item/${id}`, {
+  fetch(`/api/v1/item/${id}`, {
     method: 'put',
     body: JSON.stringify(formProps),
     headers: {
@@ -62,7 +68,7 @@ const updateItems = (e) => {
 const deleteItem = (e) => {
   e.preventDefault();
   const id = e.target.value;
-  fetch(`http://localhost:3000/api/v1/item/${id}`, {
+  fetch(`/api/v1/item/${id}`, {
     method: 'delete',
     headers: {
       'Content-Type': 'application/json',
@@ -95,7 +101,7 @@ updateForm.addEventListener('submit', updateItems);
 const socket = io();
 socket.on('connect', () => {
   // get inital values
-  fetch('http://localhost:3000/api/v1/item');
+  fetch('/api/v1/item');
 });
 socket.on('items', (res) => {
   // render whenever something changes

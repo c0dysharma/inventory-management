@@ -15,9 +15,9 @@ export const getAllItem = catchAsync(async (req, res, next) => {
 export const createItem = catchAsync(async (req, res, next) => {
   const { name, price, quantity } = req.body;
   const data = await Item.create({
-    name: name.trim(),
-    price: price.trim(),
-    quantity: quantity.trim(),
+    name,
+    price,
+    quantity,
   });
   io.emit('items', { status: 'success', data: await Item.find({}) });
   return res.status(200).json({ status: 'success', data });
@@ -30,7 +30,7 @@ export const updateItem = catchAsync(async (req, res, next) => {
 
   const data = await Item.findByIdAndUpdate(
     req.params.id,
-    { name: name.trim(), price: price.trim(), quantity: quantity.trim() },
+    { name, price, quantity },
     { new: true }
   );
   io.emit('items', { status: 'success', data: await Item.find({}) });
