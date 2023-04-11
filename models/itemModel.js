@@ -13,7 +13,7 @@ const itemSchema = mongoose.Schema({
     required: true,
   },
 
-  stock: {
+  quantity: {
     type: Number,
     required: true,
     default: 1,

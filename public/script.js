@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-syntax */
 // eslint-disable-next-line import/no-unresolved
 import { io } from 'https://cdn.socket.io/4.4.1/socket.io.esm.min.js';
 
@@ -9,7 +10,7 @@ const itemList = document.getElementById('itemList');
 const itemLi = (item) => {
   const delBtn = `<button value='${item._id}' class='delbtn' >Delete</button>`;
   return `<li> 
-  ${item.name} - $${item.price}: Quanity:${item.stock} ${delBtn}
+  ${item.name} - $${item.price}: Quanity:${item.quantity} ${delBtn}
   <br>
   id- ${item._id}
   <br><br>
@@ -38,6 +39,11 @@ const updateItems = (e) => {
   e.preventDefault();
   const formProps = Object.fromEntries(new FormData(e.target));
   const { id } = formProps;
+
+  // remove empty input from payload
+  for (const key of Object.keys(formProps)) {
+    if (formProps[key].trim() === '') delete formProps[key];
+  }
   fetch(`http://localhost:3000/api/v1/item/${id}`, {
     method: 'put',
     body: JSON.stringify(formProps),
@@ -67,7 +73,6 @@ const renderItems = (items) => {
 
   // add delete btns to them
   const delBtns = document.getElementsByClassName('delbtn');
-  // eslint-disable-next-line no-restricted-syntax
   for (const btn of delBtns) {
     btn.addEventListener('click', deleteItem);
   }
