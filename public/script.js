@@ -3,12 +3,16 @@ import { io } from 'https://cdn.socket.io/4.4.1/socket.io.esm.min.js';
 
 const getItemsBtn = document.getElementById('read');
 const createForm = document.getElementById('create');
+const updateForm = document.getElementById('update');
 const itemList = document.getElementById('itemList');
 
 const itemLi = (item) => {
   const delBtn = `<button value='${item._id}' class='delbtn' >Delete</button>`;
   return `<li> 
-  ${item.name} - $${item.price}: Quanity:${item.stock}  ${delBtn}
+  ${item.name} - $${item.price}: Quanity:${item.stock} ${delBtn}
+  <br>
+  id- ${item._id}
+  <br><br>
   </li>`;
 };
 
@@ -30,6 +34,19 @@ const createItem = (e) => {
   });
 };
 
+const updateItems = (e) => {
+  e.preventDefault();
+  const formProps = Object.fromEntries(new FormData(e.target));
+  const { id } = formProps;
+  fetch(`http://localhost:3000/api/v1/item/${id}`, {
+    method: 'put',
+    body: JSON.stringify(formProps),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+};
+
 const deleteItem = (e) => {
   e.preventDefault();
   const id = e.target.value;
@@ -41,7 +58,7 @@ const deleteItem = (e) => {
   });
 };
 
-const updateItems = (items) => {
+const renderItems = (items) => {
   let res = '';
   items.forEach((item) => {
     res += itemLi(item);
@@ -59,6 +76,7 @@ const updateItems = (items) => {
 // event listeners
 getItemsBtn.addEventListener('click', getItems);
 createForm.addEventListener('submit', createItem);
+updateForm.addEventListener('submit', updateItems);
 
 const socket = io();
 socket.on('connect', () => {
@@ -67,5 +85,5 @@ socket.on('connect', () => {
 });
 socket.on('items', (res) => {
   console.log(`Got this from server ${JSON.stringify(res)}`);
-  updateItems(res.data);
+  renderItems(res.data);
 });

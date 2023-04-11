@@ -18,15 +18,15 @@ export const createItem = catchAsync(async (req, res, next) => {
 });
 
 export const updateItem = catchAsync(async (req, res, next) => {
-  const { name, price, stock } = req.body;
+  const { name, price, quantity } = req.body;
   if (!req.params.id) next(new AppError('Requested resource not found', 404));
 
   const data = await Item.findByIdAndUpdate(
     req.params.id,
     {
-      name,
-      price,
-      stock,
+      name: name === '' ? null : name,
+      price: price === '' ? null : price,
+      stock: quantity === '' ? null : quantity,
     },
     { new: true }
   );
