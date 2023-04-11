@@ -32,7 +32,13 @@ const createItem = (e) => {
 
 const deleteItem = (e) => {
   e.preventDefault();
-  console.log(e);
+  const id = e.target.value;
+  fetch(`http://localhost:3000/api/v1/item/${id}`, {
+    method: 'delete',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
 };
 
 const updateItems = (items) => {

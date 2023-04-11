@@ -40,6 +40,6 @@ export const deleteItem = catchAsync(async (req, res, next) => {
   const data = await Item.findByIdAndDelete(req.params.id, {
     returnDocument: true,
   });
-  io.emit('items', { status: 'success', data });
+  io.emit('items', { status: 'success', data: await Item.find({}) });
   return res.status(200).json({ status: 'success', data });
 });
