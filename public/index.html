@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inventory Management</title>
+</head>
+
+<body>
+  <h2>All the items in inventory</h2>
+  <li id="itemList">
+  </li>
+  <button id="read">
+    Get All Items
+  </button>
+
+  <h2>Add Item</h2>
+  <form id="create">
+    <label for="name">Name</label>
+    <input type="text" required name="name">
+
+    <label for="price">Price</label>
+    <input type="text" required name="price">
+
+    <label for="quantity">Quantity</label>
+    <input type="text" required name="quantity">
+
+    <button type="submit">Create Item</button>
+  </form>
+</body>
+<script type="module" src="./script.js"></script>
+
+</html>
