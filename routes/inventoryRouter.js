@@ -9,6 +9,7 @@ import {
 
 const router = express.Router();
 
+// routes
 router.route('/').get(getAllItem).post(createItem);
 router.route('/:id').put(updateItem).delete(deleteItem);
 export default router;

@@ -2,11 +2,13 @@
 // eslint-disable-next-line import/no-unresolved
 import { io } from 'https://cdn.socket.io/4.4.1/socket.io.esm.min.js';
 
+// Get usable components
 const getItemsBtn = document.getElementById('read');
 const createForm = document.getElementById('create');
 const updateForm = document.getElementById('update');
 const itemList = document.getElementById('itemList');
 
+// what to render for an item
 const itemLi = (item) => {
   const delBtn = `<button value='${item._id}' class='delbtn' >Delete</button>`;
   return `<li> 
@@ -17,11 +19,13 @@ const itemLi = (item) => {
   </li>`;
 };
 
+// Read operation
 const getItems = (e) => {
   e.preventDefault();
   fetch('http://localhost:3000/api/v1/item');
 };
 
+// create operation
 const createItem = (e) => {
   e.preventDefault();
   const formProps = Object.fromEntries(new FormData(e.target));
@@ -35,6 +39,7 @@ const createItem = (e) => {
   });
 };
 
+// update operation
 const updateItems = (e) => {
   e.preventDefault();
   const formProps = Object.fromEntries(new FormData(e.target));
@@ -53,6 +58,7 @@ const updateItems = (e) => {
   });
 };
 
+// delete operation
 const deleteItem = (e) => {
   e.preventDefault();
   const id = e.target.value;
@@ -64,6 +70,7 @@ const deleteItem = (e) => {
   });
 };
 
+// used to render items on canvas
 const renderItems = (items) => {
   let res = '';
   items.forEach((item) => {
@@ -78,17 +85,20 @@ const renderItems = (items) => {
   }
 };
 
-// event listeners
+// event listeners for components
 getItemsBtn.addEventListener('click', getItems);
 createForm.addEventListener('submit', createItem);
 updateForm.addEventListener('submit', updateItems);
 
+// socket io connections
+// and handling events
 const socket = io();
 socket.on('connect', () => {
   // get inital values
   fetch('http://localhost:3000/api/v1/item');
 });
 socket.on('items', (res) => {
+  // render whenever something changes
   console.log(`Got this from server ${JSON.stringify(res)}`);
   renderItems(res.data);
 });
